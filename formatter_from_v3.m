@@ -4,6 +4,14 @@ function out = formatter_from_v3(in,text_block,versions)
 % This takes an input data structure produced by validate_v3_input and spits out HTML
 % with formatted text for CREp and CRONUSCalc. 
 
+
+% Check running in Octave
+isOctave = 0;
+if exist('OCTAVE_VERSION','builtin') > 0
+    newline = "\n";
+    isOctave = 1;
+end
+
 t.v3.text = text_block;
 
 CREP_lines_10 = {};
@@ -40,8 +48,13 @@ for a = 1:in.numnuclides
     end
 end
 
-t.CREP.text10 = char(join(CREP_lines_10,''));
-t.CREP.text3 = char(join(CREP_lines_3,''));
+if isOctave
+    t.CREP.text10 = char(strjoin(CREP_lines_10,''));
+    t.CREP.text3 = char(strjoin(CREP_lines_3,''));
+else
+    t.CREP.text10 = char(join(CREP_lines_10,''));
+    t.CREP.text3 = char(join(CREP_lines_3,''));
+end
 
 % Now generate CRONUSCalc input 
 
@@ -146,9 +159,15 @@ for a = 1:in.numnuclides
     end
 end
 
-t.CC.text1026 = char(join(CC_lines_1026,''));
-t.CC.text3 = char(join(CC_lines_3,''));
-t.CC.text14 = char(join(CC_lines_14,''));
+if isOctave
+    t.CC.text1026 = char(strjoin(CC_lines_1026,''));
+    t.CC.text3 = char(strjoin(CC_lines_3,''));
+    t.CC.text14 = char(strjoin(CC_lines_14,''));
+else
+    t.CC.text1026 = char(join(CC_lines_1026,''));
+    t.CC.text3 = char(join(CC_lines_3,''));
+    t.CC.text14 = char(join(CC_lines_14,''));
+end
 
 % Also add notes about what happened: 
 

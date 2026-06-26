@@ -6,6 +6,13 @@ function out = formatter_from_CREp(in,text_block,versions)
 
 % CREP input can be either Be-10 or He-3
 
+% Check running in Octave
+isOctave = 0;
+if exist('OCTAVE_VERSION','builtin') > 0
+    newline = "\n";
+    isOctave = 1;
+end
+
 if strcmp(in.n.nuclide{1},'N10quartz')
     t.CREP.text10 = text_block;
     t.CREP.text3 = '';
@@ -45,8 +52,11 @@ for a = 1:in.numsamples
     v3_lines{end+1} = s;
 end
 
-t.v3.text = char(join(v3_lines,''));
-
+if isOctave
+    t.v3.text = char(strjoin(v3_lines,''));
+else
+    t.v3.text = char(join(v3_lines,''));
+end
 % Now generate CRONUSCalc input 
 
 CC_lines_1026 = {};
@@ -150,9 +160,15 @@ for a = 1:in.numnuclides
     end
 end
 
-t.CC.text1026 = char(join(CC_lines_1026,''));
-t.CC.text3 = char(join(CC_lines_3,''));
-t.CC.text14 = char(join(CC_lines_14,''));
+if isOctave
+    t.CC.text1026 = char(strjoin(CC_lines_1026,''));
+    t.CC.text3 = char(strjoin(CC_lines_3,''));
+    t.CC.text14 = char(strjoin(CC_lines_14,''));
+else
+    t.CC.text1026 = char(join(CC_lines_1026,''));
+    t.CC.text3 = char(join(CC_lines_3,''));
+    t.CC.text14 = char(join(CC_lines_14,''));
+end
 
 % Also add notes about what happened: 
 

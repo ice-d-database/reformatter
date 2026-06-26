@@ -9,8 +9,21 @@ function out = formatter_wrapper(in)
 % form inputs should be in.text_block and in.inputFormat
 % returns HTML
 
-% Need path to v3 stuff - fix for remote
-path(path,'~/sw/calcs_v3/v3/core');
+
+
+% Need path to v3 stuff
+
+isOctave = 0;
+if exist('OCTAVE_VERSION','builtin') > 0
+    newline = "\n";
+    isOctave = 1;
+    path(path,'/var/www/html/math/v3');
+    path(path,'/var/www/html/math/Cl36/v3');
+else
+    path(path,'~/sw/calcs_v3/v3/core');
+    path(path,'~/sw/calcs_v3/Cl36/webcore');
+end
+
 
 versions.formatter_wrapper = '0.1-dev';
 
@@ -57,7 +70,6 @@ elseif strcmp(in.inputFormat,'CC3') || strcmp(in.inputFormat,'CC14')
     out = dump_error_HTML('Reformatting from CRONUSCalc not supported yet');
     
 elseif strcmp(in.inputFormat,'v3Cl36')
-    path(path,'~/sw/calcs_v3/Cl36/webcore')
     vin = validate_v3_Cl36(in.text_block);
     if vin.error == 1
         out = dump_error_HTML(vin.message);
