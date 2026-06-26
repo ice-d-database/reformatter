@@ -105,9 +105,9 @@ for a = 1:in.numnuclides
         % 27. Conc. 10Be Uncertainty
         % 28. Conc. 26Al Uncertainty
         if strcmp(in.n.nuclide{a},'N10quartz')
-            s = [s sprintf('%0.2f',in.n.delN(a)) tab '0' tab];
+            s = [s sprintf('%0.2e',in.n.delN(a)) tab '0' tab];
         else
-            s = [s '0' tab sprintf('%0.2f',in.n.delN(a)) tab];
+            s = [s '0' tab sprintf('%0.2e',in.n.delN(a)) tab];
         end
         % 29. Attenuation Length Uncertainty
         % 30. Depth to Top of Sample Uncertainty
@@ -147,7 +147,7 @@ for a = 1:in.numnuclides
         % 23. Erosion-Rate Uncertainty
         s = [s '0' tab '0' tab '0' tab '0' tab '0' tab '0' tab '0' tab '0' tab];
         % 24. Conc. 3He Uncertainty
-        s = [s sprintf('%0.2f',in.n.delN(a)) tab];
+        s = [s sprintf('%0.2e',in.n.delN(a)) tab];
         % 25. Attenuation Length Uncertainty
         % 26. Depth to Top of Sample Uncertainty
         % 27. Year Collected Uncertainty
