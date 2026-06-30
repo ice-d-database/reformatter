@@ -117,11 +117,12 @@ else
 end
 % Also add notes about what happened: 
 
-t.v3.notes = 'Notes: <br><br>1. Atmosphere is set to either ''std'' or ''ant'' based on latitude.<br>. 2. Latitudes > 180 have been unwrapped.<br>3. Be-10 standardization has been corrected to 07KNSTD.<br>4. For He-3, the mineral is arbitrarily set to ''pyroxene''.<br>6. Long sample names may be truncated.<br>7. Erosion rate units have been converted from mm/kyr to cm/yr.<br><br>';
+t.v3.notes = 'Notes: <br><br>1. Atmosphere is set to either ''std'' or ''ant'' based on latitude.<br>2. Latitudes > 180 have been unwrapped.<br>3. Standardizations have been converted to 07KNSTD/KNSTD.<br>4. For He-3, the mineral is arbitrarily set to ''pyroxene'', and there is no standard normalization because that''s not supported by CRONUSCalc input.<br>6. Long sample names may be truncated.<br>7. Erosion rate units have been converted from mm/kyr to cm/yr.<br><br>';
 t.v3.notes36 = '';
 
-t.CREP.notes10 = '';
-t.CREP.notes3 = '';
+t.CREP.notes3 = 'Notes:<br><br>1. Latitudes > 180 have been unwrapped.<br>2. Erosion rate units have been converted.<br><br>';
+t.CREP.notes10 = 'Notes:<br><br>1. Latitudes > 180 have been unwrapped.<br>2. Erosion rate units have been converted.<br><br>';
+t.CREP.notes36 = '';
 
 t.CC.notes1026 = '';
 t.CC.notes3 = '';
@@ -129,7 +130,8 @@ t.CC.notes14 = '';
 t.CC.notes36 = '';
 
 versions.validate = in.version_validate;
-versions.formatter_from_CREp = '0.1-dev';
+versions.formatter_from_CC = '0.1-dev';
+versions.converted_from = out.input_format;
 
 % Now we have to spit that out as HTML. 
 

@@ -11,6 +11,8 @@ out.version_validate = 'validate_CC_input.m - 0.1-dev';
 out.error = 0;
 out.message = '';
 
+out.input_format = dtype;
+
 load consts_v3;
 
 % Deal with missing data

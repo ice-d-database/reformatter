@@ -7,6 +7,8 @@ out.version_validate = 'validate_CREp_input.m - 0.1-dev';
 out.error = 0;
 out.message = '';
 
+out.input_format = nuclide;
+
 % CREp input format has 10 elements, so this must be a multiple of 10. 
 
 % Parse into non-white-space elements

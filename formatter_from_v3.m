@@ -186,6 +186,7 @@ t.CC.notes36 = '';
 
 versions.validate = in.version_validate;
 versions.formatter_from_v3 = '0.1-dev';
+versions.converted_from = out.input_format;
 
 % Now we have to spit that out as HTML. 
 
