@@ -55,13 +55,13 @@ for a = 1:in.numnuclides
     % Now spit out a nuclide concentration line
     s = in.s.sample_name{in.n.index(a)};
     if strcmp(in.n.nuclide{a},'N10quartz')
-        s = [s 'Be-10 quartz ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' 07KNSTD;' newline];
+        s = [s ' Be-10 quartz ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' 07KNSTD;' newline];
     elseif strcmp(in.n.nuclide{a},'N26quartz')
-        s = [s 'Al-26 quartz ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' KNSTD;' newline];
+        s = [s ' Al-26 quartz ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' KNSTD;' newline];
     elseif strcmp(in.n.nuclide{a},'N3pyroxene')       
-        s = [s 'He-3 pyroxene ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' NONE 0;' newline];
+        s = [s ' He-3 pyroxene ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' NONE 0;' newline];
     elseif strcmp(in.n.nuclide{a},'N14quartz')
-        s = [s 'C-14 quartz pyroxene ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' NONE 0;' newline];
+        s = [s ' C-14 quartz pyroxene ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' NONE 0;' newline];
     end  
     v3_lines{end+1} = s;
 end
