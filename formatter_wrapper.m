@@ -60,7 +60,7 @@ elseif strcmp(in.inputFormat,'CREP10') || strcmp(in.inputFormat,'CREP3')
     out = formatter_from_CREp(vin,in.text_block,versions);
     
 elseif strcmp(in.inputFormat,'CC1026')
-    vin = validate_CC_input(in.text_block,'N10N26');
+    vin = validate_CC_input(in.text_block,'CC1026');
     if vin.error == 1
         out = dump_error_HTML(vin.message);
         return
