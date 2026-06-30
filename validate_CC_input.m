@@ -95,259 +95,268 @@ for a = 1:numlines
     bad_chars = regexp(this_sample_name,'[^\w-]');
     for b = 1:length(bad_chars); this_sample_name(bad_chars(b)) = '-'; end
     % Should be OK now
-    out.s.sample_name{a} = this_sample_name;
     
-    % Scaling fx in position 2 is ignored
-    % 3. Latitude
-    ino = 3;
-	% illegal character test -- 
-	% all numerical inputs may contain digits, ., e,E +, -. 
-	if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
-		% pass
-        % Convert to number
-        temp = str2double(parsed_text{si+ino});
-        % Check that worked
-		if isnan(temp)
+    % Now we check to see if the sample is a duplicate. 
+    if isempty(strcmp(this_sample_name,out.sample_name))
+        % OK to write an out.s record    
+    
+        out.s.sample_name{a} = this_sample_name;
+
+        % Scaling fx in position 2 is ignored
+        % 3. Latitude
+        ino = 3;
+        % illegal character test -- 
+        % all numerical inputs may contain digits, ., e,E +, -. 
+        if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
+            % pass
+            % Convert to number
+            temp = str2double(parsed_text{si+ino});
+            % Check that worked
+            if isnan(temp)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - un-numericalizable latitude value - line ' int2str(a)];
+                return;
+            end
+            % test for bounds
+            if (temp > 90) || (temp < -90)
+                out.error = 1;
+                out.message = 'validate_CC_input.m: Sample data block - latitude out of bounds';
+                return;
+            end
+            % Assign
+            out.s.lat(a) = temp; clear temp;
+        else
+            % fail
             out.error = 1;
-			out.message = ['validate_CC_input.m: Sample data block - un-numericalizable latitude value - line ' int2str(a)];
+            out.message = ['validate_CC_input.m: Sample data block - illegal characters in latitude - line ' int2str(a)];
             return;
         end
-		% test for bounds
-        if (temp > 90) || (temp < -90)
+
+        % 4. Longitude
+
+        ino = 4;
+
+        if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
+            % pass
+            % Convert to number
+            temp = str2double(parsed_text{si+ino});
+            % Check that worked
+            if isnan(temp)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - un-numericalizable longitude value - line ' int2str(a)];
+                return;
+            end
+            % test for bounds
+            if (temp > 360) || (temp < -180)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - longitude out of bounds - line ' int2str(a)];
+                return;
+            end 
+            % Assign
+            if temp > 180; temp = temp-360; end
+            out.s.long(a) = temp; clear temp;
+        else
+            % fail
             out.error = 1;
-    		out.message = 'validate_CC_input.m: Sample data block - latitude out of bounds';
+            out.message = ['validate_CC_input.m: Sample data block - illegal characters in longitude - line ' int2str(a)];
+            return; 
+        end
+
+        % Elevation/pressure handling
+        % Can only use elevation because that's what's supported in CREp
+        % First look in element 7 to determine if OK
+        % Elevation is item 5 and pressure is item 6
+
+        if strcmp(parsed_text{si+7},'Elevation')
+            % Process elevation value
+            ino = 5;
+            if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
+                % Convert to number
+                temp = str2double(parsed_text{si+ino});
+                % Check that worked
+                if isnan(temp)
+                    out.error = 1;
+                    out.message = ['validate_CC_input.m: Sample data block - un-numericalizable elevation value - line ' int2str(a)];
+                    return;
+                end
+                % test for bounds
+                if (temp < 0)
+                    out.error = 1;
+                    out.message = ['validate_CC_input.m: Sample data block - elevation less than zero - line ' int2str(a)];
+                    return;
+                end 
+                % Assign
+                out.s.elv(a) = temp; clear temp;
+            else
+                % fail
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - illegal characters in elevation - line ' int2str(a)];
+                return;
+            end
+        elseif strcmp(parsed_text{si+7},'Pressure')
+            out.error = 1;
+            out.message = 'validate_CC_input.m: Can''t accept atmospheric pressure input because it''s unsupported by CREp';
+            return;
+        else
+            out.error = 1;
+            out.message = 'validate_CC_input.m: Can only accept ''Elevation'' in position 7 because pressure is unsupported by CREp';
             return;
         end
-		% Assign
-		out.s.lat(a) = temp; clear temp;
-    else
-		% fail
-        out.error = 1;
-		out.message = ['validate_CC_input.m: Sample data block - illegal characters in latitude - line ' int2str(a)];
-        return;
-    end
-    
-    % 4. Longitude
-	
-	ino = 4;
-	
-    if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
-		% pass
-        % Convert to number
-        temp = str2double(parsed_text{si+ino});
-        % Check that worked
-        if isnan(temp)
-            out.error = 1;
-			out.message = ['validate_CC_input.m: Sample data block - un-numericalizable longitude value - line ' int2str(a)];
-            return;
-        end
-		% test for bounds
-		if (temp > 360) || (temp < -180)
-            out.error = 1;
-    		out.message = ['validate_CC_input.m: Sample data block - longitude out of bounds - line ' int2str(a)];
-            return;
-        end 
-		% Assign
-        if temp > 180; temp = temp-360; end
-		out.s.long(a) = temp; clear temp;
-    else
-		% fail
-        out.error = 1;
-		out.message = ['validate_CC_input.m: Sample data block - illegal characters in longitude - line ' int2str(a)];
-        return; 
-    end
-    
-    % Elevation/pressure handling
-    % Can only use elevation because that's what's supported in CREp
-    % First look in element 7 to determine if OK
-    % Elevation is item 5 and pressure is item 6
-    
-    if strcmp(parsed_text{si+7},'Elevation')
-        % Process elevation value
-        ino = 5;
+
+        % Thickness - item 8
+
+        ino = 8;
+
         if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
             % Convert to number
             temp = str2double(parsed_text{si+ino});
             % Check that worked
             if isnan(temp)
                 out.error = 1;
-                out.message = ['validate_CC_input.m: Sample data block - un-numericalizable elevation value - line ' int2str(a)];
+                out.message = ['validate_CC_input.m: Sample data block - un-numericalizable thickness value - line ' int2str(a)];
                 return;
             end
             % test for bounds
             if (temp < 0)
                 out.error = 1;
-                out.message = ['validate_CC_input.m: Sample data block - elevation less than zero - line ' int2str(a)];
+                out.message = ['validate_CC_input.m: Sample data block - thickness less than zero - line ' int2str(a)];
                 return;
             end 
             % Assign
-            out.s.elv(a) = temp; clear temp;
+            out.s.thick(a) = temp; clear temp;
         else
             % fail
             out.error = 1;
-            out.message = ['validate_CC_input.m: Sample data block - illegal characters in elevation - line ' int2str(a)];
+            out.message = ['validate_CC_input.m: Sample data block - illegal characters in thickness - line ' int2str(a)];
             return;
         end
-    elseif strcmp(parsed_text{si+7},'Pressure')
-        out.error = 1;
-        out.message = 'validate_CC_input.m: Can''t accept atmospheric pressure input because it''s unsupported by CREp';
-        return;
-    else
-        out.error = 1;
-        out.message = 'validate_CC_input.m: Can only accept ''Elevation'' in position 7 because pressure is unsupported by CREp';
-        return;
-    end
-    
-    % Thickness - item 8
-    
-    ino = 8;
-	
-	if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
-		% Convert to number
-        temp = str2double(parsed_text{si+ino});
-        % Check that worked
-        if isnan(temp)
-            out.error = 1;
-			out.message = ['validate_CC_input.m: Sample data block - un-numericalizable thickness value - line ' int2str(a)];
-            return;
-        end
-		% test for bounds
-		if (temp < 0)
-            out.error = 1;
-    		out.message = ['validate_CC_input.m: Sample data block - thickness less than zero - line ' int2str(a)];
-            return;
-        end 
-		% Assign
-		out.s.thick(a) = temp; clear temp;
-    else
-		% fail
-        out.error = 1;
-		out.message = ['validate_CC_input.m: Sample data block - illegal characters in thickness - line ' int2str(a)];
-        return;
-    end
-    
-    % Shielding - item 10
-    
-    ino = 10;
-	
-	if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
-		% pass
-        % Convert to number
-        temp = str2double(parsed_text{si+ino});
-        % Check that worked
-        if isnan(temp)
-            out.error = 1;
-			out.message = ['validate_CC_input.m: Sample data block - un-numericalizable shielding value - line ' int2str(a)];
-            return;
-        end
-		% test for bounds
-		if (temp < 0) || (temp > 1)
-            out.error = 1;
-            out.message = ['validate_CC_input.m: Sample data block - shielding correction out of range - line ' int2str(a)];
-            return;
-        end 
-		% Assign
-		out.s.othercorr(a) = temp; clear temp;
-    else
-		% fail
-        out.error = 1;
-        out.message = ['validate_CC_input.m: Sample data block - illegal characters in shielding correction - line ' int2str(a)];
-        return;
-    end
-    
-    % Density - item 9
-    
-    ino = 9;
-	
-	if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
-		% pass
-        % Convert to number
-        temp = str2double(parsed_text{si+ino});
-        % Check that worked
-        if isnan(temp)
-            out.error = 1;
-			out.message = ['validate_CC_input.m: Sample data block - un-numericalizable density value - line ' int2str(a)];
-            return;
-        end
-		% test for bounds
-		if (temp < 0)
-            out.error = 1;
-            out.message = ['validate_CC_input.m: Sample data block - density less than zero - line ' int2str(a)];
-            return;
-        end 
-		% Assign
-		out.s.rho(a) = temp; clear temp;
-    else
-		% fail
-        out.error = 1;
-        out.message = ['validate_CC_input.m: Sample data block - illegal characters in density - line ' int2str(a)];
-        return;
-    end
-    
-    % Erosion rate - item 11
-    
-    ino = 11;
 
-    if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
-        % pass
-        % Convert to number
-        temp = str2double(parsed_text{si+ino});
-        % Check that worked
-        if isnan(temp)
-            out.error = 1;
-            out.message = ['validate_CC_input.m: Sample data block - un-numericalizable erosion rate value - line ' int2str(a)];
-            return;
-        end
-        % test for bounds
-        if (temp < 0)
-            out.error = 1;
-            out.message = ['validate_CC_input.m: Sample data block - erosion rate less than zero - line ' int2str(a)];
-            return;
-        end 
-        % Assign
-        % CC erosion rates are mm/kyr. V3 erosion rates are cm/yr. 
-        % mm/kyr * 1e-3 = mm/yr * 1e-1 = cm/yr, so mm/kyr * 1e-4 = cm/yr. 
-        out.s.E(a) = temp.*1e-4; clear temp;
-    else
-        % fail
-        out.error = 1;
-        out.message = ['validate_CC_input.m: Sample data block - illegal characters in erosion rate - line ' int2str(a)];
-        return;
-    end
-    
-    % Sample collection year
-    
-    if isAlBe
-        ino = 18;
-    else
-        ino = 15;
-    end
+        % Shielding - item 10
 
-    if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
-        % pass
-        % Convert to number
-        temp = str2double(parsed_text{si+ino});
-        % Check that worked
-        if isnan(temp)
+        ino = 10;
+
+        if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
+            % pass
+            % Convert to number
+            temp = str2double(parsed_text{si+ino});
+            % Check that worked
+            if isnan(temp)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - un-numericalizable shielding value - line ' int2str(a)];
+                return;
+            end
+            % test for bounds
+            if (temp < 0) || (temp > 1)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - shielding correction out of range - line ' int2str(a)];
+                return;
+            end 
+            % Assign
+            out.s.othercorr(a) = temp; clear temp;
+        else
+            % fail
             out.error = 1;
-            out.message = ['validate_CC_input.m: Sample data block - un-numericalizable collection year value - line ' int2str(a)];
+            out.message = ['validate_CC_input.m: Sample data block - illegal characters in shielding correction - line ' int2str(a)];
             return;
         end
-        % test for bounds
-        if (temp < 0)
+
+        % Density - item 9
+
+        ino = 9;
+
+        if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
+            % pass
+            % Convert to number
+            temp = str2double(parsed_text{si+ino});
+            % Check that worked
+            if isnan(temp)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - un-numericalizable density value - line ' int2str(a)];
+                return;
+            end
+            % test for bounds
+            if (temp < 0)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - density less than zero - line ' int2str(a)];
+                return;
+            end 
+            % Assign
+            out.s.rho(a) = temp; clear temp;
+        else
+            % fail
             out.error = 1;
-            out.message = ['validate_CC_input.m: Sample data block - collection year less than zero - line ' int2str(a)];
+            out.message = ['validate_CC_input.m: Sample data block - illegal characters in density - line ' int2str(a)];
             return;
-        end 
-        % Assign
-        out.s.yr(a) = temp; clear temp;
-    else
-        % fail
-        out.error = 1;
-        out.message = ['validate_CC_input.m: Sample data block - illegal characters in collection year - line ' int2str(a)];
-        return;
+        end
+
+        % Erosion rate - item 11
+
+        ino = 11;
+
+        if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
+            % pass
+            % Convert to number
+            temp = str2double(parsed_text{si+ino});
+            % Check that worked
+            if isnan(temp)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - un-numericalizable erosion rate value - line ' int2str(a)];
+                return;
+            end
+            % test for bounds
+            if (temp < 0)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - erosion rate less than zero - line ' int2str(a)];
+                return;
+            end 
+            % Assign
+            % CC erosion rates are mm/kyr. V3 erosion rates are cm/yr. 
+            % mm/kyr * 1e-3 = mm/yr * 1e-1 = cm/yr, so mm/kyr * 1e-4 = cm/yr. 
+            out.s.E(a) = temp.*1e-4; clear temp;
+        else
+            % fail
+            out.error = 1;
+            out.message = ['validate_CC_input.m: Sample data block - illegal characters in erosion rate - line ' int2str(a)];
+            return;
+        end
+
+        % Sample collection year
+
+        if isAlBe
+            ino = 18;
+        else
+            ino = 15;
+        end
+
+        if isempty(regexp(parsed_text{si+ino},'[^\d.eE+-]','once'))
+            % pass
+            % Convert to number
+            temp = str2double(parsed_text{si+ino});
+            % Check that worked
+            if isnan(temp)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - un-numericalizable collection year value - line ' int2str(a)];
+                return;
+            end
+            % test for bounds
+            if (temp < 0)
+                out.error = 1;
+                out.message = ['validate_CC_input.m: Sample data block - collection year less than zero - line ' int2str(a)];
+                return;
+            end 
+            % Assign
+            out.s.yr(a) = temp; clear temp;
+        else
+            % fail
+            out.error = 1;
+            out.message = ['validate_CC_input.m: Sample data block - illegal characters in collection year - line ' int2str(a)];
+            return;
+        end
     end
     
+    % End block if executes if sample name is not repeated
+    % Always write a nuclide concentration line
+
     
     if isAlBe
         % Be-10 concentration
