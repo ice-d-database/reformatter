@@ -96,11 +96,13 @@ for a = 1:numlines
     for b = 1:length(bad_chars); this_sample_name(bad_chars(b)) = '-'; end
     % Should be OK now
     
+    index = a-1; % This is needed to get indexing right
     % Now we check to see if the sample is a duplicate. 
-    if isempty(strcmp(this_sample_name,out.s.sample_name))
+    if isempty(find(strcmp(this_sample_name,out.s.sample_name)))
         % OK to write an out.s record    
     
         out.s.sample_name{a} = this_sample_name;
+        index = a;
 
         % Scaling fx in position 2 is ignored
         % 3. Latitude
@@ -412,7 +414,7 @@ for a = 1:numlines
         end
         
         if temp > 0
-            out.n.index(end+1) = a;
+            out.n.index(end+1) = index;
             out.n.nuclide{end+1} = 'N10quartz';
             this_CF = consts.be_stds_cfs(find(strcmp(parsed_text{13},consts.be_stds_names)));
             if isempty(this_CF)
@@ -479,7 +481,7 @@ for a = 1:numlines
         end
         
         if temp > 0
-            out.n.index(end+1) = a;
+            out.n.index(end+1) = index;
             out.n.nuclide{end+1} = 'N26quartz';
             this_CF = consts.al_stds_cfs(find(strcmp(parsed_text{15},consts.al_stds_names)));
             if isempty(this_CF)
@@ -551,7 +553,7 @@ for a = 1:numlines
         end
         
         if temp > 0
-            out.n.index(end+1) = a;
+            out.n.index(end+1) = index;
             out.n.nuclide{end+1} = this_nuclide;
             out.n.N(end+1) = temp; 
             out.n.delN(end+1) = temp1;

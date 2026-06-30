@@ -35,20 +35,22 @@ v3_lines = {};
 % Spitting out v3 text needs to be by both sample and nuclide, because numsamples doesn't
 % necessarily have to equal numnuclides
 for a = 1:in.numsamples
-    % Spit out a sample line
-    % Sample name, lat, long
-    s = [in.s.sample_name{a} ' ' sprintf('%0.4f',in.s.lat(a)) ' ' sprintf('%0.4f',in.s.long(a)) ' '];
-    % Elevation, elevation flag
-    if in.s.lat(a) < -60    
-        s = [s sprintf('%0.0f',in.s.elv(a)) ' ant '];
-    else
-        s = [s sprintf('%0.0f',in.s.elv(a)) ' std '];
+    if ~isempty(in.s.sample_name{a})
+        % Spit out a sample line
+        % Sample name, lat, long
+        s = [in.s.sample_name{a} ' ' sprintf('%0.4f',in.s.lat(a)) ' ' sprintf('%0.4f',in.s.long(a)) ' '];
+        % Elevation, elevation flag
+        if in.s.lat(a) < -60    
+            s = [s sprintf('%0.0f',in.s.elv(a)) ' ant '];
+        else
+            s = [s sprintf('%0.0f',in.s.elv(a)) ' std '];
+        end
+        % Thickness, density, shielding, erosion rate, date
+        s = [s sprintf('%0.1f',in.s.thick(a)) ' ' sprintf('%0.2f',in.s.rho(a)) ' '];
+        s = [s sprintf('%0.4f',in.s.othercorr(a)) ' ' sprintf('%0.3e',in.s.E(a)) ' '];
+        s = [s sprintf('%0.0f',in.s.yr(a)) ';' newline];
+        v3_lines{end+1} = s;
     end
-    % Thickness, density, shielding, erosion rate, date
-    s = [s sprintf('%0.1f',in.s.thick(a)) ' ' sprintf('%0.2f',in.s.rho(a)) ' '];
-    s = [s sprintf('%0.4f',in.s.othercorr(a)) ' ' sprintf('%0.3e',in.s.E(a)) ' '];
-    s = [s sprintf('%0.0f',in.s.yr(a)) ';' newline];
-    v3_lines{end+1} = s;
 end
 
 for a = 1:in.numnuclides   
