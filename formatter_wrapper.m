@@ -53,16 +53,28 @@ elseif strcmp(in.inputFormat,'CREP10') || strcmp(in.inputFormat,'CREP3')
     elseif strcmp(in.inputFormat,'CREP3')
         vin = validate_CREp_input(in.text_block,'N3pyroxene');
     end
+    if vin.error == 1
+        out = dump_error_HTML(vin.message);
+        return
+    end
     out = formatter_from_CREp(vin,in.text_block,versions);
     
 elseif strcmp(in.inputFormat,'CC1026')
     vin = validate_CC_input(in.text_block,'N10N26');
+    if vin.error == 1
+        out = dump_error_HTML(vin.message);
+        return
+    end
     out = formatter_from_CC(vin,in.text_block,versions);   
 elseif strcmp(in.inputFormat,'CC3') || strcmp(in.inputFormat,'CC14')
     if strcmp(in.inputFormat,'CC3')
         vin = validate_CC_input(in.text_block,'CC3');
     elseif strcmp(in.inputFormat,'CC14')
         vin = validate_CC_input(in.text_block,'CC14');
+    end
+    if vin.error == 1
+        out = dump_error_HTML(vin.message);
+        return
     end
     out = formatter_from_CC(vin,text_block,versions);   
 elseif strcmp(in.inputFormat,'v3Cl36')
@@ -71,6 +83,7 @@ elseif strcmp(in.inputFormat,'v3Cl36')
         out = dump_error_HTML(vin.message);
         return
     end
+    
     out = dump_error_HTML('Cl-36 not supported yet');
     
 elseif strcmp(in.inputFormat,'CREP36')
