@@ -76,7 +76,7 @@ elseif strcmp(in.inputFormat,'CC3') || strcmp(in.inputFormat,'CC14')
         out = dump_error_HTML(vin.message);
         return
     end
-    out = formatter_from_CC(vin,text_block,versions);   
+    out = formatter_from_CC(vin,in.text_block,versions);   
 elseif strcmp(in.inputFormat,'v3Cl36')
     vin = validate_v3_Cl36(in.text_block);
     if vin.error == 1
