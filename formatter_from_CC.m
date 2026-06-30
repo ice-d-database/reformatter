@@ -61,7 +61,7 @@ for a = 1:in.numnuclides
     elseif strcmp(in.n.nuclide{a},'N3pyroxene')       
         s = [s ' He-3 pyroxene ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' NONE 0;' newline];
     elseif strcmp(in.n.nuclide{a},'N14quartz')
-        s = [s ' C-14 quartz ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ' NONE 0;' newline];
+        s = [s ' C-14 quartz ' sprintf('%0.3e',in.n.N(a)) ' ' sprintf('%0.2e',in.n.delN(a)) ';' newline];
     end  
     v3_lines{end+1} = s;
 end
