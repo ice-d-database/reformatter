@@ -52,6 +52,9 @@ for a = 1:in.numsamples
     v3_lines{end+1} = s;
 end
 
+% Need to get rid of any duplicate sample lines
+v3_lines = unique(v3_lines);
+
 if isOctave
     t.v3.text = char(strjoin(v3_lines,''));
 else

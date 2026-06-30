@@ -66,7 +66,7 @@ for a = 1:in.numnuclides
     v3_lines{end+1} = s;
 end
 
-% Need to get rid of any duplicates
+% Need to get rid of any duplicate sample lines
 v3_lines = unique(v3_lines);
 
 if isOctave
