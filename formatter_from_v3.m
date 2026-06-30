@@ -8,9 +8,10 @@ function out = formatter_from_v3(in,text_block,versions)
 % Check running in Octave
 isOctave = 0;
 if exist('OCTAVE_VERSION','builtin') > 0
-    newline = "\n";
     isOctave = 1;
 end
+
+nl = char(10);
 
 t.v3.text = text_block;
 
@@ -36,14 +37,14 @@ for a = 1:in.numnuclides
         s = [in.s.sample_name{in.n.index(a)} tab sprintf('%0.4f',in.s.lat(in.n.index(a))) tab sprintf('%0.4f',in.s.long(in.n.index(a))) tab];
         s = [s sprintf('%0.0f',in.s.elv(in.n.index(a))) tab sprintf('%0.3e',in.n.N(a)) tab sprintf('%0.2e',in.n.delN(a)) tab];
         s = [s sprintf('%0.4f',in.s.othercorr(in.n.index(a))) tab sprintf('%0.2f',in.s.rho(in.n.index(a))) tab];
-        s = [s sprintf('%0.1f',in.s.thick(in.n.index(a))) tab sprintf('%0.2e',in.s.E(in.n.index(a))) newline];
+        s = [s sprintf('%0.1f',in.s.thick(in.n.index(a))) tab sprintf('%0.2e',in.s.E(in.n.index(a))) nl];
         CREP_lines_10{end+1} = s;
-    elseif strcmp(in.n.nuclide{a},'N3pyroxene') | strcmp(in.n.nuclide{a},'N3olivine')
+    elseif strcmp(in.n.nuclide{a},'N3pyroxene') || strcmp(in.n.nuclide{a},'N3olivine')
         % Spit out a He-3 line
         s = [in.s.sample_name{in.n.index(a)} tab sprintf('%0.4f',in.s.lat(in.n.index(a))) tab sprintf('%0.4f',in.s.long(in.n.index(a))) tab];
         s = [s sprintf('%0.0f',in.s.elv(in.n.index(a))) tab sprintf('%0.3e',in.n.N(a)) tab sprintf('%0.2e',in.n.delN(a)) tab];
         s = [s sprintf('%0.4f',in.s.othercorr(in.n.index(a))) tab sprintf('%0.2f',in.s.rho(in.n.index(a))) tab];
-        s = [s sprintf('%0.1f',in.s.thick(in.n.index(a))) tab sprintf('%0.2e',in.s.E(in.n.index(a))) newline];
+        s = [s sprintf('%0.1f',in.s.thick(in.n.index(a))) tab sprintf('%0.2e',in.s.E(in.n.index(a))) nl];
         CREP_lines_3{end+1} = s;
     end
 end
@@ -63,7 +64,7 @@ CC_lines_3 = {};
 CC_lines_14 = {};
 
 for a = 1:in.numnuclides
-    if strcmp(in.n.nuclide{a},'N10quartz') | strcmp(in.n.nuclide{a},'N26quartz')
+    if strcmp(in.n.nuclide{a},'N10quartz') || strcmp(in.n.nuclide{a},'N26quartz')
         % 1. Sample Name
         % 2. Scaling -- use ST always, user can change
         % 3. Latitude
@@ -112,7 +113,7 @@ for a = 1:in.numnuclides
         % 29. Attenuation Length Uncertainty
         % 30. Depth to Top of Sample Uncertainty
         % 31. Year Collected Uncertainty
-        s = [s '0' tab '0' tab '0' newline];
+        s = [s '0' tab '0' tab '0' nl];
         CC_lines_1026{end+1} = s;
     elseif strcmp(in.n.nuclide{a},'N3pyroxene') | strcmp(in.n.nuclide{a},'N3olivine') | strcmp(in.n.nuclide{a},'N14quartz')
         % He-3 and C-14 have the same set of inputs
@@ -151,7 +152,7 @@ for a = 1:in.numnuclides
         % 25. Attenuation Length Uncertainty
         % 26. Depth to Top of Sample Uncertainty
         % 27. Year Collected Uncertainty
-        s = [s '0' tab '0' tab '0' newline];
+        s = [s '0' tab '0' tab '0' nl];
         if strcmp(in.n.nuclide{a},'N14quartz')
             CC_lines_14{end+1} = s;
         else
