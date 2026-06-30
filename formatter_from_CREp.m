@@ -79,7 +79,8 @@ for a = 1:in.numnuclides
         s = [s sprintf('%0.1f',in.s.thick(in.n.index(a))) tab sprintf('%0.2f',in.s.rho(in.n.index(a))) tab];
         % 10. Shielding Factor
         % 11. Erosion Rate
-        s = [s sprintf('%0.4f',in.s.othercorr(in.n.index(a))) tab sprintf('%0.2e',in.s.E(in.n.index(a))) tab];
+        % CC erosion rates are mm/kyr. CREp and v3 erosion rates are cm/yr. 
+        s = [s sprintf('%0.4f',in.s.othercorr(in.n.index(a))) tab sprintf('%0.2e',1e4.*in.s.E(in.n.index(a))) tab];
         % 12. Conc. 10Be
         % 13. 10Be Standardization
         % 14. Conc. 26Al
@@ -172,14 +173,14 @@ end
 
 % Also add notes about what happened: 
 
-t.v3.notes = 'Notes: <br><br>1. Atmosphere is set to either ''std'' or ''ant'' based on latitude.<br>2. Collection date is not in CREp input so is arbitrarily set to the beginning of the first Trump administration.<br>3. Be-10 standardization is assumed to be 07KNSTD.<br>4. CREp input has no standardization info for He-3.<br>5. For He-3, the mineral is arbitrarily set to ''pyroxene''. ';
+t.v3.notes = 'Notes: <br><br>1. Atmosphere is set to either ''std'' or ''ant'' based on latitude.<br>2. Collection date is not in CREp input so is arbitrarily set to the beginning of the first Trump administration.<br>3. Be-10 standardization is assumed to be 07KNSTD.<br>4. CREp input has no standardization info for He-3.<br>5. For He-3, the mineral is arbitrarily set to ''pyroxene''.<br>6. Long sample names may be truncated.<br><br>';
 t.v3.notes36 = '';
 
 t.CREP.notes10 = '';
 t.CREP.notes3 = '';
 
-t.CC.notes1026 = 'Notes:<br><br>1. The ''scaling method'' input is set to ''ST'' for all lines.<br>2. Be-10 concentrations have been assumed on 07KNSTD.<br><br>';
-t.CC.notes3 = 'Notes:<br><br>1. The ''scaling method'' input is set to ''ST'' for all lines.<br><br>';
+t.CC.notes1026 = 'Notes:<br><br>1. The ''scaling method'' input is set to ''ST'' for all lines.<br>2. Be-10 concentrations have been assumed on 07KNSTD.<br>3. Long sample names may be truncated.<br>4. Erosion rate units have been converted from cm/yr to mm/kyr.<br><br>';
+t.CC.notes3 = 'Notes:<br><br>1. The ''scaling method'' input is set to ''ST'' for all lines.<br>2. Long sample names may be truncated.<br>3. Erosion rate units have been converted from cm/yr to mm/kyr<br><br>';
 t.CC.notes14 = '';
 t.CC.notes36 = '';
 

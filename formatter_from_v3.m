@@ -78,7 +78,8 @@ for a = 1:in.numnuclides
         s = [s sprintf('%0.1f',in.s.thick(in.n.index(a))) tab sprintf('%0.2f',in.s.rho(in.n.index(a))) tab];
         % 10. Shielding Factor
         % 11. Erosion Rate
-        s = [s sprintf('%0.4f',in.s.othercorr(in.n.index(a))) tab sprintf('%0.2e',in.s.E(in.n.index(a))) tab];
+        % CC erosion rates are mm/kyr. v3 erosion rates are cm/yr. 
+        s = [s sprintf('%0.4f',in.s.othercorr(in.n.index(a))) tab sprintf('%0.2e',1e4.*in.s.E(in.n.index(a))) tab];
         % 12. Conc. 10Be
         % 13. 10Be Standardization
         % 14. Conc. 26Al

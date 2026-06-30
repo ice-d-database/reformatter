@@ -78,7 +78,7 @@ for a = 1:numlines
             return;
         end
 		% test for bounds
-		if (temp > 90) || (temp < -90);
+		if (temp > 90) || (temp < -90)
             out.error = 1;
     		out.message = 'validate_CREp_input.m: Sample data block - latitude out of bounds';
             return;
