@@ -40,6 +40,7 @@ elseif strcmp(dtype,'CC14')
 else
     out.error = 1;
     out.message = 'validate_CC_input.m: Unrecognized nuclide input';
+    return
 end
 
 if mod(numitems,numcols) ~= 0
