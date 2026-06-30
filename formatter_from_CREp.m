@@ -128,7 +128,7 @@ for a = 1:in.numnuclides
         % 5. Elevation
         % 6. Pressure
         % 7. Atmospheric Pressure or Elevation(Select One) - always uses elevation
-        s = [s sprintf('%0.0f',in.s.elv(in.n.index(a))) tab '0' tab 'Elevation' tab];
+        s = [s sprintf('%0.0f',in.s.elv(in.n.index(a))) tab '1013.25' tab 'Elevation' tab];
         % 8. Sample Thickness
         % 9. Bulk Density
         s = [s sprintf('%0.1f',in.s.thick(in.n.index(a))) tab sprintf('%0.2f',in.s.rho(in.n.index(a))) tab];
