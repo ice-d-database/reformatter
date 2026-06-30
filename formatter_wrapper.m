@@ -41,6 +41,7 @@ end
 
 if strcmp(in.inputFormat,'v3')
     vin = validate_v3_input(in.text_block);
+    vin.input_format = 'v3';
     if vin.error == 1
         out = dump_error_HTML(vin.message);
         return
