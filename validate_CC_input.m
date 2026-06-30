@@ -97,7 +97,7 @@ for a = 1:numlines
     % Should be OK now
     
     % Now we check to see if the sample is a duplicate. 
-    if isempty(strcmp(this_sample_name,out.sample_name))
+    if isempty(strcmp(this_sample_name,out.s.sample_name))
         % OK to write an out.s record    
     
         out.s.sample_name{a} = this_sample_name;
