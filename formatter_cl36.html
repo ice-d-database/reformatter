@@ -1,0 +1,115 @@
+<html>
+
+<head>
+
+<title>Exposure age calculator format conversion</title>
+
+
+<style>
+<!--table {}
+.title
+ {font-family:Arial;
+ font-size:14.0pt;}
+.standard
+ {font-family:Arial;
+ font-size:10.0pt;}
+.xl25
+ {font-family:Arial;
+ text-align:center;} 
+.title2 {font-family:Arial;
+ font-size:12.0pt;}
+-->
+</style>
+
+</head>
+
+
+<body background="/img/2tone.jpeg" bgcolor="#dedede">
+
+<center>
+
+<table width=800>
+<tr><td colspan=2><hr></td></tr>
+ <tr>  
+  <td width=600 class=standard>
+   <p><i><b>
+   Input format translator for all online exposure age calculators.</b> </p>
+   <p>Written by Greg Balco, 
+   <a href="mailto:balcs@bgc.org">balcs@bgc.org</a></p>
+  </td>
+  <td class=standard align=right>
+	<i><a href="/">Calculators home</a></i><br>
+	<i><a href="/math/v3/v3_erosion_in.html">Erosion rates</a></i><br>
+	<i><a href="/math/v3/v3_cal_in.html">Production rate calibration</a></i><br>
+	<i><a href="https://sites.google.com/a/bgc.org/v3docs/">v3 documentation</a></i><br>
+  </td>
+ </tr> 
+
+</table>
+
+
+<!-- START MAIN FORM -->
+
+<form action="/cgi-bin/matweb" method="post" target="formatterOutputWindow">
+
+<input name="mlmfile" value="formatter_wrapper" type="hidden">
+
+<table width=800 class=standard>
+ <tr>
+  <td class=standard><hr></td>
+ </tr>
+ <tr>
+ 	<td class=standard>
+ 	<p><b><i>Notes:</b></p>
+ 	<blockquote>
+ 	<p>This converts exposure age calculator input among v3/ICE-D, CREp, and CRONUSCalc formats. </p>
+
+	<p>This one is for Cl-36 data. For other nuclides, go <a href="/math/formatter/formatter.html">here</a>.</p>
+ 	
+	<p>Information about the version 3 input format, including Cl-36: <a href="/math/docs/v3/v3_input_explained.html">
+ Link</a> <br>
+	&emsp; You can get all the data you want in this format from <a href="www.ice-d.org">the ICE-D website.</a></p>
+	<p>CREp data input template for Cl-36:  <a href="https://crep-dev.otelo.univ-lorraine.fr/sample_CREP_36Cl.xlsx">
+Spreadsheet file</a> <br>
+	CRONUSCalc data input template for Cl-36: <a href="https://cronus.cosmogenicnuclides.rocks/2.1/html/cl/CRONUScalc36ClTemplate.xlsx"> Spreadsheet file</a> </p>
+	</blockquote>
+	<br><br>
+	<b>Known issues</b> (there are probably a lot of unknown ones too):
+	<blockquote>
+	1. If you leave a box blank in a CRONUSCalc input template spreadsheet (e.g., the 'pressure' box) and tabs don't properly carry through cutting and pasting, you may get weird results. Easiest to make sure there are no empty boxes. <br>
+	2. You can't use the 'pressure' option in either v3 or CRONUSCalc input, because CREp input format doesn't support that. <br>
+	3. Transfer of multiple nuclide measurements on the same sample between formats may not be perfect. Tough to handle all possible contingencies here. <br>
+	4. If something doesn't work, <a href="mailto:balcs@bgc.org"> send me </a> the input data and tell me what the problem is. <br>
+	</blockquote>
+ 	</td>
+ </tr>
+ <tr>
+ 	<td class=standard><i>
+	<p>Input data format: 
+		<select name="inputFormat">
+		<option value="v3Cl36" selected>ICE-D/v3, Cl-36 (default)</option>
+		<option value="CREP36">CREp, Cl-36 (not yet implemented)</option>
+		<option value="CC36">CRONUSCalc, Cl-36 (not yet implemented)</option>
+</select>
+ 	<p><i>Enter data block here.<i></p>
+  	</td>
+  </tr>
+ <tr>
+         <td align="center"><textarea name="text_block" cols=110 rows=30></textarea>
+      </td>
+ </tr>
+      
+ <tr>
+  <td align="center">
+  <input name="Submit" value="Reformat now" type="submit"></p>
+  </td>
+ </tr>
+  
+
+ <tr><td ><hr></td></tr>
+
+</table> 
+
+</form>
+</body></html>
+
